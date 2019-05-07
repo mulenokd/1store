@@ -1038,8 +1038,13 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.b-popup-edit-add.icon-minus', function(){
-        var $link = $(this).parents("form").find(".b-popup-edit-add.icon-plus");
+        var $form = $(this).parents("form"),
+            $link = $form.find(".b-popup-edit-add.icon-plus"),
+            $id = $(this).parents(".b-popup-edit-container").find(".address-item-id").attr("value");
         $link.attr('data-clone', parseInt($link.attr('data-clone')) - 1);
+        if (typeof $id != 'undefined') {
+            $form.append("<input type='hidden' name='delete[]' value="+$id+">");
+        }
         $(this).parents('.b-popup-edit-container').remove();
         return false;
     });

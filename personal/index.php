@@ -163,13 +163,20 @@ if( isset($_REQUEST["action"]) ){
 			break;
 		case "editUser":
 
+			$complete = true;
+			$user = new CUser;
+
+			foreach ($_POST["delete"] as $item){
+				if(!CIBlockElement::Delete($item)){
+					$complete = false;
+			    }
+			}
+
 			$arPost["NAME"] = $_POST["name"];
 			$arPost["LAST_NAME"] = $_POST["surname"];
 			$arPost["SECOND_NAME"] = $_POST["lastname"];
 			$arPost["EMAIL"] = $_POST["email"];
 			$arPost["PERSONAL_PHONE"] = $_POST["tel"];
-
-			$user = new CUser;
 
 			foreach ($arPost as $key => $field) {
 				if (!empty($field)) {
@@ -177,16 +184,8 @@ if( isset($_REQUEST["action"]) ){
 				}
 			}
 
-			if( $user->Update($userID, $arFields) ){
-				echo json_encode(array(
-					"error" => 0,
-					"message" => "Данные успешно изменены",
-				));
-			}else{
-				echo json_encode(array(
-					"error" => 1,
-					"message" => "Ошибка смены данных"
-				));
+			if( !$user->Update($userID, $arFields) ){
+				$complete = false;
 			}
 
 			foreach ($_POST["addr"] as $item){
@@ -211,16 +210,8 @@ if( isset($_REQUEST["action"]) ){
 
 					if ($isEdited) {
 						$el = new CIBlockElement;
-						if ($el->Update($item["id"], Array("PROPERTY_VALUES"=> $editedFields))) {
-							echo json_encode(array(
-								"error" => 0,
-								"message" => "Данные успешно изменены",
-							));
-						} else {
-							echo json_encode(array(
-								"error" => 1,
-								"message" => "Ошибка",
-							));
+						if (!$el->Update($item["id"], Array("PROPERTY_VALUES"=> $editedFields))) {
+							$complete = false;
 						}
 					}
 
@@ -237,20 +228,20 @@ if( isset($_REQUEST["action"]) ){
 					);
 
 					$el = new CIBlockElement;
-					if($el->Add($arLoadProductArray)){
-						echo json_encode(array(
-							"error" => 0,
-							"message" => "Данные успешно добавлены",
-						));
-					}
-
-					else{
-						echo json_encode(array(
-							"error" => 1,
-							"message" => "Ошибка",
-						));
+					if(!$el->Add($arLoadProductArray)){
+						$complete = false;
 					}
 				}
+			}
+
+			if ($complete) {
+				echo json_encode(array(
+					"error" => 0,
+				));
+			} else {
+				echo json_encode(array(
+					"error" => 1,
+				));
 			}
 
 			break;

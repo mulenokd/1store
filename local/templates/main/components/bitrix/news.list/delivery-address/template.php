@@ -24,7 +24,7 @@ $this->setFrameMode(true);
 			<? if ($i == 0): ?>
 				<div class="b-popup-h4">Адрес доставки</div>
 			<? else: ?>
-				<a href="#b-popup-delete-address" class="b-popup-h4 fancy b-popup-edit-add icon-minus">Адрес доставки</a>
+				<a href="#" class="b-popup-h4 b-popup-edit-add icon-minus">Адрес доставки</a>
 			<? endif; ?>
 			<div class="b-popup-edit-block">
 				<div class="b-input-string">
@@ -45,7 +45,7 @@ $this->setFrameMode(true);
 				<div class="b-input-string">
 					<input type="phone" class="b-popup-input" name="addr[<?=$i?>][FLAT]" placeholder="Квартира" value="<?=$arItem["PROPERTIES"]["FLAT"]["VALUE"]?>" required/>
 				</div>
-				<input type="hidden" name="addr[<?=$i?>][id]" value="<?=$arItem["ID"]?>">
+				<input type="hidden" class="address-item-id" name="addr[<?=$i?>][id]" value="<?=$arItem["ID"]?>">
 			</div>
 		</div>
 		<? $i++; ?>
